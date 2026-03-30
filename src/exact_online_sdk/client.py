@@ -376,11 +376,12 @@ class AsyncExactOnlineClient:
         json: Optional[Dict[str, Any]] = None,
     ) -> Any:
         headers = await self._request_headers()
+        request_params = _copy_request_params(params)
         resolved = self._resolve_path(path)
         url = f"{self._settings.base_url}/api/v1/{resolved.lstrip('/')}"
         try:
             resp = await self._client.request(
-                method, url, params=params, json=json, headers=headers
+                method, url, params=request_params, json=json, headers=headers
             )
         except httpx.HTTPError as exc:
             raise api_error_from_status(0, f"HTTP error: {exc}") from exc
@@ -435,14 +436,14 @@ class AsyncExactOnlineClient:
     async def aiter_pages(
         self, path: str, *, params: Optional[Dict[str, Any]] = None
     ) -> AsyncGenerator[list[Any], None]:
-        async def _build_url(p: str) -> str:
+        def _build_url(p: str) -> str:
             if p.startswith("http"):
                 return p
             resolved = self._resolve_path(p)
             return f"{self._settings.base_url}/api/v1/{resolved.lstrip('/')}"
 
-        url = await _build_url(path)
-        next_params: Optional[Dict[str, Any]] = dict(params or {})
+        url = _build_url(path)
+        next_params = _copy_request_params(params)
         while True:
             async for attempt in AsyncRetrying(
                 retry=retry_if_exception(_is_retryable),
@@ -480,7 +481,7 @@ class AsyncExactOnlineClient:
                     )
                     yield items
                     if next_link:
-                        url = await _build_url(next_link)
+                        url = _build_url(next_link)
                         next_params = None
                     else:
                         return
