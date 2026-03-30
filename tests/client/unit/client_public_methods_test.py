@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from typing import Any, Dict
-from unittest.mock import AsyncMock, MagicMock, patch
+from unittest.mock import AsyncMock, MagicMock
 
 import httpx
 import pytest
@@ -173,6 +173,28 @@ def test_sync_handle_response_malformed_json_raises_sdk_error() -> None:
         or "malformed" in str(exc_info.value).lower()
     )
     assert exc_info.value.context.get("content_type") == "application/json"
+
+    client.close()
+
+
+def test_sync_handle_response_missing_content_type_raises_sdk_error() -> None:
+    """Test that responses without Content-Type header raise SDK exception when JSON is invalid."""
+    settings = _settings()
+    client = ExactOnlineClient(settings=settings, auth=DummyAuth())
+
+    # Create response without Content-Type header and with invalid JSON
+    content = b"not valid json"
+    request = httpx.Request("GET", "https://api.example/api/v1/crm/Accounts")
+    resp = httpx.Response(200, content=content, headers={}, request=request)
+
+    with pytest.raises(APIError) as exc_info:
+        client._handle_response(resp)
+
+    assert (
+        "JSON" in str(exc_info.value) or "content-type" in str(exc_info.value).lower()
+    )
+    # Content-Type should be None or missing in context
+    assert exc_info.value.context.get("content_type") is None
 
     client.close()
 

@@ -1,0 +1,143 @@
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = ["setuptools>=68", "wheel"]
+
+[project]
+authors = [{name = "Carlos Paiva", email = "2202731+carlospaiva@users.noreply.github.com"}]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+  "Topic :: Office/Business",
+  "Topic :: Internet :: WWW/HTTP",
+]
+description = "A robust Python SDK for integrating with Exact Online APIs"
+keywords = ["Exact Online", "SDK", "API", "Business Software"]
+license = "MIT"
+name = "exact-online-sdk"
+readme = "README.md"
+requires-python = ">=3.9"
+version = "0.1.0"
+
+# Production dependencies
+dependencies = [
+  "pydantic>=2.5",
+  "httpx>=0.24",
+  "python-dotenv>=1.0",
+  "tenacity>=8.2",
+  "cryptography>=42.0",
+  "typing-extensions>=4.7",
+]
+
+[project.optional-dependencies]
+aws = [
+  "boto3>=1.28",
+]
+# Development tools
+dev = [
+  "mypy>=1.7",
+  "flake8>=6.1",
+  "isort>=5.12",
+  "black>=23.10",
+  "pylint>=3.0",
+  "pytest>=7.4",
+  "pytest-cov>=4.1",
+  "pytest-asyncio>=0.23",
+  "pytest-httpx>=0.30",
+  "pytest-xdist>=3.0",
+  "pre-commit>=3.5",
+  "boto3>=1.28",
+  "boto3-stubs[secretsmanager]>=1.28",
+]
+
+[dependency-groups]
+dev = [
+  "mypy>=1.7",
+  "flake8>=6.1",
+  "isort>=5.12",
+  "black>=23.10",
+  "pylint>=3.0",
+  "pytest>=7.4",
+  "pytest-cov>=4.1",
+  "pytest-asyncio>=0.23",
+  "pytest-httpx>=0.30",
+  "pytest-xdist>=3.0",
+  "pre-commit>=3.5",
+  "boto3>=1.28",
+  "boto3-stubs[secretsmanager]>=1.28",
+]
+
+[project.urls]
+Homepage = "https://github.com/carlospaiva/exact-online-sdk"
+Issues = "https://github.com/carlospaiva/exact-online-sdk/issues"
+Repository = "https://github.com/carlospaiva/exact-online-sdk"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+include = ["exact_online_sdk*"]
+where = ["src"]
+
+[tool.black]
+line-length = 88
+target-version = ["py39"]
+
+[tool.isort]
+line_length = 88
+profile = "black"
+
+[tool.pylint.MASTER]
+ignore = [".venv", "venv", "build", "dist", "docs"]
+load-plugins = []
+
+[tool.pylint.'MESSAGES CONTROL']
+disable = [
+  "C0114", # missing-module-docstring
+  "C0115", # missing-class-docstring
+  "C0116", # missing-function-docstring
+  "C0415", # import-outside-toplevel
+  "R0801", # duplicate-code (model files share common fields)
+  "R0902", # too-many-instance-attributes
+  "R0903", # too-few-public-methods
+  "R0911", # too-many-return-statements
+  "R0913", # too-many-arguments
+  "R0914", # too-many-local-variables
+  "R0917", # too-many-positional-arguments
+  "R1737", # use-yield-from
+  "C0302", # too-many-lines in module
+  "W0107", # unnecessary-pass (bulk model stubs)
+  "W0718", # broad-exception-caught
+]
+
+[tool.mypy]
+check_untyped_defs = true
+disallow_untyped_defs = true
+exclude = ["build", "dist"]
+ignore_missing_imports = true
+mypy_path = ["src"]
+no_implicit_optional = true
+plugins = ["pydantic.mypy"]
+python_version = "3.9"
+strict = true
+warn_redundant_casts = true
+warn_return_any = true
+warn_unreachable = true
+warn_unused_ignores = true
+
+[tool.pytest.ini_options]
+addopts = "-ra -vv --cov=src --cov-report=term-missing --cov-fail-under=100"
+asyncio_mode = "auto"
+markers = [
+  "unit: unit tests",
+  "integration: integration tests",
+  "e2e: end-to-end tests",
+  "performance: performance benchmarks",
+  "regression: regression tests",
+]
+testpaths = ["tests"]
