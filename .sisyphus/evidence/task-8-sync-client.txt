@@ -1,0 +1,4 @@
+Command: uv run pytest tests/client/unit/ --no-cov -k "sync_public or handle_response or request_impl"
+
+Result: 24 passed, 47 deselected
+Status: Sync request/header and parse-path regression tests passed.

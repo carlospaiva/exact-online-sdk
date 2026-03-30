@@ -1,0 +1,4 @@
+Command: uv run pytest tests/api/unit/ tests/client/unit/ --no-cov -k "override"
+
+Result: 7 passed, 366 deselected
+Status: Explicit format override behavior remains preserved.

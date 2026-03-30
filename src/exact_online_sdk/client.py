@@ -63,8 +63,16 @@ def _response_context(resp: httpx.Response) -> dict[str, Any]:
 
 def _json_request_headers(headers: dict[str, str]) -> dict[str, str]:
     request_headers = dict(headers)
-    request_headers["Accept"] = "application/json"
+    request_headers.setdefault("Accept", "application/json")
     return request_headers
+
+
+def _copy_request_params(
+    params: Optional[Dict[str, Any]],
+) -> Optional[Dict[str, Any]]:
+    if params is None:
+        return None
+    return dict(params)
 
 
 def _content_type_looks_json(content_type: Optional[str]) -> bool:
@@ -190,12 +198,13 @@ class ExactOnlineClient:
         json: Optional[Dict[str, Any]] = None,
     ) -> Any:
         headers = self._request_headers()
+        request_params = _copy_request_params(params)
         resolved = self._resolve_path(path)
         url = f"{self._settings.base_url}/api/v1/{resolved.lstrip('/')}"
         with self._http_lock:
             try:
                 resp = self._client.request(
-                    method, url, params=params, json=json, headers=headers
+                    method, url, params=request_params, json=json, headers=headers
                 )
             except httpx.HTTPError as exc:
                 raise api_error_from_status(0, f"HTTP error: {exc}") from exc
@@ -246,29 +255,8 @@ class ExactOnlineClient:
             resolved = self._resolve_path(p)
             return f"{self._settings.base_url}/api/v1/{resolved.lstrip('/')}"
 
-        def _extract_items_next(
-            resp: httpx.Response,
-        ) -> tuple[list[Any], Optional[str]]:
-            data = resp.json() if resp.content else None
-            next_link: Optional[str] = None
-            items: list[Any] = []
-            if isinstance(data, dict):
-                # OData v2
-                if "d" in data and isinstance(data["d"], dict):
-                    d = data["d"]
-                    if isinstance(d.get("results"), list):
-                        items = list(d["results"])
-                    next_link = d.get("__next") or d.get("@odata.nextLink")
-                # OData v4
-                if not items and isinstance(data.get("value"), list):
-                    items = list(data["value"])
-                    next_link = data.get("@odata.nextLink")
-            elif isinstance(data, list):
-                items = data
-            return items, next_link
-
         url = _build_url(path)
-        next_params: Optional[Dict[str, Any]] = dict(params or {})
+        next_params = _copy_request_params(params)
         while True:
             # Retry each page independently
             for attempt in Retrying(
