@@ -175,7 +175,7 @@ def test_is_retryable_utility() -> None:
 
 
 def _response(
-    status: int, data: Any, url: str, headers: dict[str, str] | None = None
+    status: int, data: Any, url: str, headers: Optional[dict[str, str]] = None
 ) -> httpx.Response:
     request = httpx.Request("GET", url)
     return httpx.Response(status, json=data, headers=headers or {}, request=request)

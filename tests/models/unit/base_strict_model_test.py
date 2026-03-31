@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from typing import Optional
 from uuid import UUID, uuid4
 
 import pytest
@@ -12,7 +13,7 @@ from exact_online_sdk.models.base import StrictModel, _snake_to_pascal
 class ExampleModel(StrictModel):
     id: UUID
     account_manager_full_name: str
-    optional_field: str | None = None
+    optional_field: Optional[str] = None
 
 
 def test_snake_to_pascal_alias_generation() -> None:

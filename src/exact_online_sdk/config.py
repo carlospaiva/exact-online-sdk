@@ -12,7 +12,7 @@ DEFAULT_BASE_URL = "https://start.exactonline.nl"
 AUTH_PATH = "/api/oauth2/auth"
 TOKEN_PATH = "/api/oauth2/token"
 DEFAULT_TIMEOUT = 30
-USER_AGENT = "exact-online-sdk/1.0.3 (+https://github.com/carlospaiva/exact-online-sdk)"
+USER_AGENT = "exact-online-sdk/1.0.4 (+https://github.com/carlospaiva/exact-online-sdk)"
 
 
 @dataclass(frozen=True)

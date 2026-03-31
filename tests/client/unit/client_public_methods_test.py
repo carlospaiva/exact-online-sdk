@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 from unittest.mock import AsyncMock, MagicMock
 
 import httpx
@@ -245,14 +245,16 @@ def test_sync_public_methods_delegate_to_request(
     settings = _settings()
     client = ExactOnlineClient(settings=settings, auth=DummyAuth())
 
-    calls: list[tuple[str, str, Dict[str, Any] | None, Dict[str, Any] | None]] = []
+    calls: list[
+        tuple[str, str, Optional[Dict[str, Any]], Optional[Dict[str, Any]]]
+    ] = []
 
     def fake_request(
         method: str,
         path: str,
         *,
-        params: Dict[str, Any] | None = None,
-        json: Dict[str, Any] | None = None,
+        params: Optional[Dict[str, Any]] = None,
+        json: Optional[Dict[str, Any]] = None,
     ) -> str:
         calls.append((method, path, params, json))
         return "ok"
@@ -280,14 +282,16 @@ async def test_async_public_methods_delegate_to_arequest(
     settings = _settings()
     client = AsyncExactOnlineClient(settings=settings, auth=DummyAuth())
 
-    calls: list[tuple[str, str, Dict[str, Any] | None, Dict[str, Any] | None]] = []
+    calls: list[
+        tuple[str, str, Optional[Dict[str, Any]], Optional[Dict[str, Any]]]
+    ] = []
 
     async def fake_arequest(
         method: str,
         path: str,
         *,
-        params: Dict[str, Any] | None = None,
-        json: Dict[str, Any] | None = None,
+        params: Optional[Dict[str, Any]] = None,
+        json: Optional[Dict[str, Any]] = None,
     ) -> str:
         calls.append((method, path, params, json))
         return "ok"

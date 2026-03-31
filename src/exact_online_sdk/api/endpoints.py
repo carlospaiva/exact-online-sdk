@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from datetime import date, datetime
-from typing import Any, Iterable, Iterator, List, Mapping, Optional
+from typing import Any, Iterable, Iterator, List, Mapping, Optional, Union
 from uuid import UUID
 
 from pydantic import ValidationError as PydanticValidationError
@@ -228,7 +228,7 @@ FilterValue = Any
 
 
 class BaseAPI:
-    model_cls: type[StrictModel] | None = None
+    model_cls: Optional[type[StrictModel]] = None
     _skip_division: bool = False
 
     def __init__(self, client: ExactOnlineClient) -> None:
@@ -263,7 +263,7 @@ class BaseAPI:
         return self._deserialize_item(data, raw=raw)
 
     def create(
-        self, payload: dict[str, Any] | StrictModel, *, raw: bool = False
+        self, payload: Union[dict[str, Any], StrictModel], *, raw: bool = False
     ) -> Any:
         body = self._serialize_payload(payload)
         data = self.client.post(self._get_resource_path(), json=body)
@@ -272,7 +272,7 @@ class BaseAPI:
     def update(
         self,
         entity_id: str,
-        payload: dict[str, Any] | StrictModel,
+        payload: Union[dict[str, Any], StrictModel],
         *,
         raw: bool = False,
     ) -> Any:
@@ -391,7 +391,7 @@ class BaseAPI:
         return f"'{escaped}'"
 
     def _serialize_payload(
-        self, payload: dict[str, Any] | StrictModel
+        self, payload: Union[dict[str, Any], StrictModel]
     ) -> dict[str, Any]:
         if isinstance(payload, StrictModel):
             return payload.model_dump()

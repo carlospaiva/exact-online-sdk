@@ -42,7 +42,7 @@ EXACT_LOG_LEVEL=INFO
 EXACT_LOG_JSON=false
 EXACT_LOG_FILE=
 EXACT_TIMEOUT=30
-EXACT_USER_AGENT=exact-online-sdk/1.0.3 (+https://github.com/carlospaiva/exact-online-sdk)
+EXACT_USER_AGENT=exact-online-sdk/1.0.4 (+https://github.com/carlospaiva/exact-online-sdk)
 ```
 
 The SDK derives default auth/token URLs from `EXACT_BASE_URL` (`/api/oauth2/auth` and `/api/oauth2/token`).

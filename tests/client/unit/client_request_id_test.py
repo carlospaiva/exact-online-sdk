@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from typing import Optional
 from unittest.mock import MagicMock
 
 import httpx
@@ -29,7 +30,7 @@ def _settings() -> Settings:
 
 
 def _response(
-    status: int, url: str, *, headers: dict[str, str] | None = None
+    status: int, url: str, *, headers: Optional[dict[str, str]] = None
 ) -> httpx.Response:
     request = httpx.Request("GET", url)
     return httpx.Response(status, text="body", headers=headers or {}, request=request)

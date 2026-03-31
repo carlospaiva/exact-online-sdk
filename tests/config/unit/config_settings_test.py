@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Optional
+
 import pytest
 
 from exact_online_sdk.config import Settings
@@ -43,7 +45,7 @@ def test_settings_from_env_loads_values(monkeypatch: pytest.MonkeyPatch) -> None
     ],
 )
 def test_env_helper_returns_value(
-    monkeypatch: pytest.MonkeyPatch, env_key: str, default: str | None, expected: str
+    monkeypatch: pytest.MonkeyPatch, env_key: str, default: Optional[str], expected: str
 ) -> None:
     monkeypatch.setenv(env_key, expected)
     assert Settings._env(env_key, default) == expected
