@@ -316,7 +316,6 @@ def test_raw_true_in_iter_pages_returns_unparsed_items() -> None:
     assert len(pages) == 1
     assert pages[0] == raw_items
     assert isinstance(pages[0][0], dict)
-    assert not isinstance(pages[0][0], DummyModel)
 
 
 def test_raw_true_in_iter_all_returns_unparsed_items() -> None:
@@ -330,7 +329,6 @@ def test_raw_true_in_iter_all_returns_unparsed_items() -> None:
 
     assert len(items) == 2
     assert isinstance(items[0], dict)
-    assert not isinstance(items[0], DummyModel)
 
 
 def test_raw_false_deserializes_to_model() -> None:

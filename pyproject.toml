@@ -22,7 +22,7 @@ license = "MIT"
 name = "exact-online-sdk"
 readme = "README.md"
 requires-python = ">=3.9"
-version = "1.0.1"
+version = "1.0.2"
 
 # Production dependencies
 dependencies = [
@@ -131,7 +131,7 @@ warn_unreachable = true
 warn_unused_ignores = true
 
 [[tool.mypy.overrides]]
-module = ["_pytest", "_pytest.*"]
+module = ["pytest_httpx", "pytest_httpx.*"]
 follow_imports = "skip"
 
 [tool.pytest.ini_options]
