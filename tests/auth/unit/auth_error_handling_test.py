@@ -144,8 +144,10 @@ def test_refresh_token_non_json_response(httpx_mock: HTTPXMock) -> None:
     )
 
 
-def test_refresh_token_malformed_json(httpx_mock: HTTPXMock) -> None:
-    """Test that malformed JSON success responses during refresh raise AuthenticationError."""
+def test_refresh_token_malformed_json(
+    httpx_mock: HTTPXMock,
+) -> None:
+    """Test malformed JSON success responses during refresh raise error."""
     settings = _settings()
     storage = InMemoryTokenStorage()
     storage.set_token(

@@ -9,7 +9,7 @@ from pytest_httpx import HTTPXMock
 
 from exact_online_sdk.client import AsyncExactOnlineClient, ExactOnlineClient
 from exact_online_sdk.config import Settings
-from exact_online_sdk.exceptions import APIError, RateLimitError, ExactOnlineSDKError
+from exact_online_sdk.exceptions import APIError, ExactOnlineSDKError, RateLimitError
 
 
 class DummyAuth:
@@ -199,7 +199,10 @@ def test_iter_pages_xml_response_raises_sdk_error(httpx_mock: HTTPXMock) -> None
         redirect_uri="https://app.example/callback",
         base_url="https://api.example",
     )
-    xml_content = b'<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom"><entry><id>1</id></entry></feed>'
+    xml_content = (
+        b'<?xml version="1.0" encoding="utf-8"?><feed '
+        b'xmlns="http://www.w3.org/2005/Atom"><entry><id>1</id></entry></feed>'
+    )
     httpx_mock.add_response(
         method="GET",
         url="https://api.example/api/v1/crm/Accounts",
@@ -257,7 +260,9 @@ def test_iter_pages_preserves_format_override(httpx_mock: HTTPXMock) -> None:
         url="https://api.example/api/v1/crm/Accounts?%24format=json",
         json={
             "value": [{"ID": "1"}],
-            "@odata.nextLink": "https://api.example/api/v1/crm/Accounts?$skiptoken=ABC&$format=json",
+            "@odata.nextLink": (
+                "https://api.example/api/v1/crm/Accounts?$skiptoken=ABC&$format=json"
+            ),
         },
     )
     httpx_mock.add_response(

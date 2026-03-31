@@ -123,7 +123,10 @@ def test_sync_handle_response_xml_raises_sdk_error() -> None:
     settings = _settings()
     client = ExactOnlineClient(settings=settings, auth=DummyAuth())
 
-    xml_content = b"<?xml version='1.0'?><feed xmlns='http://www.w3.org/2005/Atom'><entry></entry></feed>"
+    xml_content = (
+        b"<?xml version='1.0'?><feed xmlns='http://www.w3.org/2005/Atom'>"
+        b"<entry></entry></feed>"
+    )
     resp = _response_with_content_type(200, xml_content, "application/atom+xml")
 
     with pytest.raises(APIError) as exc_info:
@@ -178,7 +181,7 @@ def test_sync_handle_response_malformed_json_raises_sdk_error() -> None:
 
 
 def test_sync_handle_response_missing_content_type_raises_sdk_error() -> None:
-    """Test that responses without Content-Type header raise SDK exception when JSON is invalid."""
+    """Test responses without Content-Type header raise SDK exception for bad JSON."""
     settings = _settings()
     client = ExactOnlineClient(settings=settings, auth=DummyAuth())
 
@@ -351,11 +354,14 @@ async def test_async_post_sends_accept_json_header(httpx_mock: Any) -> None:
 
 @pytest.mark.asyncio
 async def test_async_handle_response_xml_raises_sdk_error() -> None:
-    """Test that async XML success responses raise SDK exception, not JSONDecodeError."""
+    """Test async XML success responses raise SDK exception, not JSONDecodeError."""
     settings = _settings()
     client = AsyncExactOnlineClient(settings=settings, auth=DummyAuth())
 
-    xml_content = b"<?xml version='1.0'?><feed xmlns='http://www.w3.org/2005/Atom'><entry></entry></feed>"
+    xml_content = (
+        b"<?xml version='1.0'?><feed xmlns='http://www.w3.org/2005/Atom'>"
+        b"<entry></entry></feed>"
+    )
     resp = _response_with_content_type(200, xml_content, "application/atom+xml")
 
     with pytest.raises(APIError) as exc_info:
@@ -373,7 +379,7 @@ async def test_async_handle_response_xml_raises_sdk_error() -> None:
 
 @pytest.mark.asyncio
 async def test_async_handle_response_html_raises_sdk_error() -> None:
-    """Test that async HTML success responses raise SDK exception, not JSONDecodeError."""
+    """Test async HTML success responses raise SDK exception, not JSONDecodeError."""
     settings = _settings()
     client = AsyncExactOnlineClient(settings=settings, auth=DummyAuth())
 

@@ -174,7 +174,7 @@ async def test_async_integration_delete_sends_accept_json(
     )
 
     client = AsyncExactOnlineClient(settings=settings, auth=DummyAuth())
-    result = await client.delete("crm/Accounts(guid'123')")
+    await client.delete("crm/Accounts(guid'123')")
 
     # Verify Accept header was sent even for DELETE
     request = httpx_mock.get_request()
@@ -187,10 +187,13 @@ async def test_async_integration_delete_sends_accept_json(
 async def test_async_integration_xml_response_raises_sdk_error(
     httpx_mock: HTTPXMock,
 ) -> None:
-    """Integration test: async XML success response raises SDK error, not JSONDecodeError."""
+    """Integration test: async XML success raises SDK error, not JSONDecodeError."""
     settings = _settings()
 
-    xml_content = b'<?xml version="1.0"?><feed xmlns="http://www.w3.org/2005/Atom"><entry><id>1</id></entry></feed>'
+    xml_content = (
+        b'<?xml version="1.0"?><feed xmlns="http://www.w3.org/2005/Atom">'
+        b"<entry><id>1</id></entry></feed>"
+    )
     httpx_mock.add_response(
         method="GET",
         url="https://api.example/api/v1/crm/Accounts",
@@ -272,7 +275,10 @@ async def test_async_integration_pagination_xml_raises_sdk_error(
     """Integration test: async pagination XML response raises SDK error."""
     settings = _settings()
 
-    xml_content = b'<?xml version="1.0"?><feed xmlns="http://www.w3.org/2005/Atom"><entry><id>1</id></entry></feed>'
+    xml_content = (
+        b'<?xml version="1.0"?><feed xmlns="http://www.w3.org/2005/Atom">'
+        b"<entry><id>1</id></entry></feed>"
+    )
     httpx_mock.add_response(
         method="GET",
         url="https://api.example/api/v1/crm/Accounts",
@@ -337,7 +343,9 @@ async def test_async_integration_preserves_explicit_format_override(
         json={
             "d": {
                 "results": [{"ID": "1"}],
-                "__next": "https://api.example/api/v1/crm/Accounts?$skiptoken=DEF&$format=xml",
+                "__next": (
+                    "https://api.example/api/v1/crm/Accounts?$skiptoken=DEF&$format=xml"
+                ),
             }
         },
     )

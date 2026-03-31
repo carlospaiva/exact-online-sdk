@@ -214,7 +214,8 @@ class ExactOnlineAuth:
                 except Exception as exc:
                     content_type = resp.headers.get("Content-Type", "unknown")
                     raise AuthenticationError(
-                        f"Token exchange failed: invalid JSON response (Content-Type: {content_type})"
+                        "Token exchange failed: invalid JSON response "
+                        f"(Content-Type: {content_type})"
                     ) from exc
                 token = Token.from_token_response(token_data)
                 self._storage.set_token(token)
@@ -249,7 +250,8 @@ class ExactOnlineAuth:
                 except Exception as exc:
                     content_type = resp.headers.get("Content-Type", "unknown")
                     raise AuthenticationError(
-                        f"Token refresh failed: invalid JSON response (Content-Type: {content_type})"
+                        "Token refresh failed: invalid JSON response "
+                        f"(Content-Type: {content_type})"
                     ) from exc
                 token = Token.from_token_response(token_data)
                 self._storage.set_token(token)
@@ -293,7 +295,8 @@ class ExactOnlineAuth:
                     except Exception as exc:
                         content_type = resp.headers.get("Content-Type", "unknown")
                         raise AuthenticationError(
-                            f"Token exchange failed: invalid JSON response (Content-Type: {content_type})"
+                            "Token exchange failed: invalid JSON response "
+                            f"(Content-Type: {content_type})"
                         ) from exc
                     token = Token.from_token_response(token_data)
                     self._storage.set_token(token)
@@ -325,7 +328,8 @@ class ExactOnlineAuth:
                 except Exception as exc:
                     content_type = resp.headers.get("Content-Type", "unknown")
                     raise AuthenticationError(
-                        f"Token refresh failed: invalid JSON response (Content-Type: {content_type})"
+                        "Token refresh failed: invalid JSON response "
+                        f"(Content-Type: {content_type})"
                     ) from exc
                 token = Token.from_token_response(token_data)
                 self._storage.set_token(token)

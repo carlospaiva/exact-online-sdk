@@ -9,7 +9,7 @@ from pytest_httpx import HTTPXMock
 
 from exact_online_sdk.client import AsyncExactOnlineClient
 from exact_online_sdk.config import Settings
-from exact_online_sdk.exceptions import APIError, RateLimitError, ExactOnlineSDKError
+from exact_online_sdk.exceptions import APIError, ExactOnlineSDKError, RateLimitError
 
 
 class DummyAuth:
@@ -161,7 +161,10 @@ async def test_aiter_pages_xml_response_raises_sdk_error(
     httpx_mock: HTTPXMock,
 ) -> None:
     settings = _settings()
-    xml_content = b'<?xml version="1.0"?><feed xmlns="http://www.w3.org/2005/Atom"><entry><id>1</id></entry></feed>'
+    xml_content = (
+        b'<?xml version="1.0"?><feed xmlns="http://www.w3.org/2005/Atom">'
+        b"<entry><id>1</id></entry></feed>"
+    )
     httpx_mock.add_response(
         method="GET",
         url="https://api.example/api/v1/crm/Accounts",
@@ -221,7 +224,9 @@ async def test_aiter_pages_preserves_explicit_format_override(
         json={
             "d": {
                 "results": [{"ID": "1"}],
-                "__next": "https://api.example/api/v1/crm/Accounts?$skiptoken=DEF&$format=xml",
+                "__next": (
+                    "https://api.example/api/v1/crm/Accounts?$skiptoken=DEF&$format=xml"
+                ),
             }
         },
     )

@@ -66,8 +66,10 @@ def test_integration_sync_json_negotiation_success(httpx_mock: HTTPXMock) -> Non
     assert request.headers.get("Accept") == "application/json"
 
 
-def test_integration_sync_non_json_success_response(httpx_mock: HTTPXMock) -> None:
-    """Prove non-JSON success responses produce descriptive SDK failure, not raw decode error."""
+def test_integration_sync_non_json_success_response(
+    httpx_mock: HTTPXMock,
+) -> None:
+    """Prove non-JSON success responses produce SDK failure, not raw decode error."""
     settings = Settings(
         client_id="client",
         client_secret="secret",
@@ -78,7 +80,8 @@ def test_integration_sync_non_json_success_response(httpx_mock: HTTPXMock) -> No
     # Simulate XML/Atom response (non-JSON success)
     xml_body = """<?xml version="1.0" encoding="utf-8"?>
     <feed xmlns="http://www.w3.org/2005/Atom">
-        <entry><content type="application/xml"><m:properties></m:properties></content></entry>
+        <entry><content type="application/xml">
+        <m:properties></m:properties></content></entry>
     </feed>"""
 
     httpx_mock.add_response(
@@ -111,7 +114,7 @@ def test_integration_sync_non_json_success_response(httpx_mock: HTTPXMock) -> No
 def test_integration_sync_accounts_path_no_raw_decode_error(
     httpx_mock: HTTPXMock,
 ) -> None:
-    """Prove the Exact-style Accounts path no longer fails with raw JSON decode errors."""
+    """Prove Exact-style Accounts path no longer fails with raw JSON decode errors."""
     settings = Settings(
         client_id="client",
         client_secret="secret",
@@ -151,8 +154,10 @@ def test_integration_sync_accounts_path_no_raw_decode_error(
     assert data[0]["Name"] == "Account One"
 
 
-def test_integration_sync_html_error_response(httpx_mock: HTTPXMock) -> None:
-    """Prove HTML success responses (like error pages) produce descriptive SDK failure."""
+def test_integration_sync_html_error_response(
+    httpx_mock: HTTPXMock,
+) -> None:
+    """Prove HTML success responses produce descriptive SDK failure."""
     settings = Settings(
         client_id="client",
         client_secret="secret",
