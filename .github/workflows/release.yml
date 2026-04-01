@@ -7,7 +7,6 @@ on:
 
 permissions:
   contents: write
-  id-token: write
 
 concurrency:
   group: release-${{ github.ref_name }}
@@ -99,6 +98,7 @@ jobs:
       - name: Publish package to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
+          attestations: false
           password: ${{ secrets.PYPI_API_TOKEN }}
 
   release:
