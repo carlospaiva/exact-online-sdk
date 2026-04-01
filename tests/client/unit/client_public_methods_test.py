@@ -245,9 +245,9 @@ def test_sync_public_methods_delegate_to_request(
     settings = _settings()
     client = ExactOnlineClient(settings=settings, auth=DummyAuth())
 
-    calls: list[
-        tuple[str, str, Optional[Dict[str, Any]], Optional[Dict[str, Any]]]
-    ] = []
+    calls: list[tuple[str, str, Optional[Dict[str, Any]], Optional[Dict[str, Any]]]] = (
+        []
+    )
 
     def fake_request(
         method: str,
@@ -282,9 +282,9 @@ async def test_async_public_methods_delegate_to_arequest(
     settings = _settings()
     client = AsyncExactOnlineClient(settings=settings, auth=DummyAuth())
 
-    calls: list[
-        tuple[str, str, Optional[Dict[str, Any]], Optional[Dict[str, Any]]]
-    ] = []
+    calls: list[tuple[str, str, Optional[Dict[str, Any]], Optional[Dict[str, Any]]]] = (
+        []
+    )
 
     async def fake_arequest(
         method: str,

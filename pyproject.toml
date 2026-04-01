@@ -22,7 +22,7 @@ license = "MIT"
 name = "exact-online-sdk"
 readme = "README.md"
 requires-python = ">=3.9"
-version = "1.0.4"
+version = "1.0.5"
 
 # Production dependencies
 dependencies = [
